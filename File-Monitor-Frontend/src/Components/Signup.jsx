@@ -1,27 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
+import {useNavigate} from 'react-router-dom'
 import { Card, CardContent, TextField, Button, Typography, Box } from '@mui/material';
+import axios from 'axios';
 
 function Signup() {
-  const [formData, setFormData] = useState({
+    const navigate = useNavigate()
+    const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
-  });
+    });
 
-  const handleChange = (e) => {
+    const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  };
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form Submitted:', formData);
-  };
+    const handleSubmit = (e) => {
+      e.preventDefault()
+      axios.post('http://localhost:8000/signup', formData)
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      navigate("/", {replace: true})
+    };
 
-  return (
+    return (
     <Box
       display="flex"
       justifyContent="center"
