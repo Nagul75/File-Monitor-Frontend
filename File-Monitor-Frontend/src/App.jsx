@@ -136,11 +136,11 @@ export default function Home() {
           {loggedIn ? (
             <>
               <Box sx={{display: 'flex', gap: 2}}>
-                <Button onClick={handleLogout} variant="contained" color="inherit">
+                <Button onClick={handleLogout} variant="text" color="inherit">
                   Logout
                 </Button>
                 <IconButton>
-                  <AccountCircle/>
+                  <AccountCircle sx={{color: 'white'}}/>
                 </IconButton>
               </Box>
             </>
