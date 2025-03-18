@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, TextField, Button, Typography, Box } from '@mui/material';
+import {useNavigate} from 'react-router-dom'
+import axios from 'axios';
 
 function Login() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -17,7 +20,17 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Submitted:', formData);
+    axios.post('http://localhost:8000/login', formData)
+      .then((respsonse) => {
+        const {token} = respsonse.data
+        console.log(token)
+        localStorage.setItem('authToken', token)
+        navigate("/", {replace: true})
+      })
+      .catch((err) => {
+        console.error(err)
+        navigate("/login", {replace: true})
+      })
   };
 
   return (
