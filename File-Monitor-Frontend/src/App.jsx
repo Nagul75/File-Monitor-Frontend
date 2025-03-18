@@ -18,7 +18,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import {AccountCircle} from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
+import AuthContext  from './context/authContext';
 
 const drawerWidth = 240;
 
@@ -81,6 +84,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function Home() {
+  const { loggedIn, setLoggedIn } = React.useContext(AuthContext);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -91,6 +95,21 @@ export default function Home() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const navigate = useNavigate()
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('authToken')
+    if(token) {
+      setLoggedIn(true)
+    }
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken')
+    setLoggedIn(false)
+    navigate('/login')
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -114,14 +133,29 @@ export default function Home() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Generic Website
           </Typography>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button color="inherit" variant="text" href='/login'>
-              Login
-            </Button>
-            <Button color="inherit" variant="text" href='/signup'>
-              Signup
-            </Button>
-          </Box>
+          {loggedIn ? (
+            <>
+              <Box sx={{display: 'flex', gap: 2}}>
+                <Button onClick={handleLogout} variant="contained" color="inherit">
+                  Logout
+                </Button>
+                <IconButton>
+                  <AccountCircle/>
+                </IconButton>
+              </Box>
+            </>
+          ): (
+            <>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <Button color="inherit" variant="text" href='/login'>
+                  Login
+                </Button>
+                <Button color="inherit" variant="text" href='/signup'>
+                  Signup
+                </Button>
+              </Box>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Card, CardContent, TextField, Button, Typography, Box } from '@mui/material';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
+import  AuthContext  from '../context/AuthContext';
 
 function Login() {
+  const { setLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     username: '',
@@ -25,6 +27,7 @@ function Login() {
         const {token} = respsonse.data
         console.log(token)
         localStorage.setItem('authToken', token)
+        setLoggedIn(true);
         navigate("/", {replace: true})
       })
       .catch((err) => {
