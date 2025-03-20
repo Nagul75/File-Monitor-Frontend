@@ -10,8 +10,8 @@ export default function Logs() {
     useEffect(() => {
         axios.get("http://localhost:8000/admin/logs")
             .then((res) => {
+                res.data.logs.pop()
                 setLogs(res.data.logs)
-                console.log(res.data.logs)
             })
             .catch((err) => {
                 console.log(err)
@@ -31,7 +31,7 @@ export default function Logs() {
         <Box>
             <ul>
                 {Array.isArray(logs) && logs.map((log, index) => (
-                    <li key={index}><Typography variant="h6" color="white">{log}</Typography></li>
+                    <li key={index}><Typography variant="h6" color="white">{index+1} : {log}</Typography></li>
                 ))}
             </ul>
         </Box>
